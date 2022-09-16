@@ -1,0 +1,43 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+    private float speed = 8f;        //speed of the player variable
+    private Rigidbody playerRb;
+    public Vector3 turn;    
+    private GameObject FloatPoint;
+
+    //private float sesnsitivity = 5f;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        playerRb = GetComponent<Rigidbody>();
+        FloatPoint = GameObject.Find("Focal Point");
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        float horizontalInput = Input.GetAxis("Horizontal");         //getting horizontal input keys
+        float verticalInput = Input.GetAxis("Vertical");             //geting vertical input keys
+
+        transform.Translate(Vector3.forward * Time.deltaTime * speed * verticalInput);            //moving player in up/down direction with input
+        transform.Translate(Vector3.right * Time.deltaTime * speed * horizontalInput);           //moving player in left/right direction with input
+
+    
+
+        turn.y += Input.GetAxis("Mouse X");
+        FloatPoint.transform.localRotation = Quaternion.Euler(0, turn.y * 50, 0);
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Walls"))
+        {
+            Destroy(gameObject);
+        }
+    }
+}
